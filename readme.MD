@@ -2,10 +2,10 @@
 
 
 ## Sobre o projeto
-### Professor: Abrantes Araújo Silva Filho @https://github.com/computacaoraiz
+### Professor: Abrantes Araújo Silva Filho  https://github.com/abrantesasf
 ### Matéria do curso de sistemas de informação da universidade de Vila velha
 ### Aluno: Caio Silva Campos 
-### Turma: Si1N UVV
+### Turma: SI/1N
 
 ## Tecnologia utilizada
   -PostgreSQL
