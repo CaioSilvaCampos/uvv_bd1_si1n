@@ -8,7 +8,7 @@
 DROP DATABASE IF EXISTS uvv;
 
 -- REMOVER USUARIO caio_silva
-drop role caio_silva;
+drop role if exists caio_silva;
 
 
 -- CRIAR USUARIO
@@ -45,21 +45,21 @@ GRANT ALL PRIVILEGES ON DATABASE uvv TO caio_silva;
 -- CRIAR TABELA PRODUTOS
 
 CREATE TABLE Produtos (
-                identidade_dos_produtos NUMERIC(38) NOT NULL,
+                produto_id NUMERIC(38) NOT NULL,
                 nome_produtos VARCHAR(255) NOT NULL,
-                preco_unitario_produtos NUMERIC(10,2),
+                preco_unitario NUMERIC(10,2),
                 detalhes BYTEA,
                 imagem_produtos BYTEA,
                 mime_type VARCHAR(512),
                 imagem_arquivo VARCHAR(512),
                 imagem_charset VARCHAR(512),
                 imagem_ultima_atualizacao DATE,
-                CONSTRAINT produto_id PRIMARY KEY (identidade_dos_produtos)
+                CONSTRAINT produto_id PRIMARY KEY (produto_id)
 );
 COMMENT ON TABLE Produtos IS 'Tabela que armazena informações do produto';
-COMMENT ON COLUMN Produtos.identidade_dos_produtos IS 'id dos produtos';
+COMMENT ON COLUMN Produtos.produto_id IS 'id dos produtos';
 COMMENT ON COLUMN Produtos.nome_produtos IS 'nome dos produtos';
-COMMENT ON COLUMN Produtos.preco_unitario_produtos IS 'Detalhes';
+COMMENT ON COLUMN Produtos.preco_unitario IS 'Detalhes';
 COMMENT ON COLUMN Produtos.detalhes IS 'Detalhes dos produtos';
 COMMENT ON COLUMN Produtos.imagem_produtos IS 'imagem dos produtos';
 COMMENT ON COLUMN Produtos.mime_type IS 'tipo de arquivo da imagem';
@@ -67,8 +67,6 @@ COMMENT ON COLUMN Produtos.imagem_arquivo IS 'arquivo da imagem';
 COMMENT ON COLUMN Produtos.imagem_charset IS 'charset das imagens';
 COMMENT ON COLUMN Produtos.imagem_ultima_atualizacao IS 'data da ultima atualizacao da imagem';
 
-
--- CRIAR TABELA LOJAS
 CREATE TABLE Lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 Nome VARCHAR(255) NOT NULL,
@@ -97,35 +95,31 @@ COMMENT ON COLUMN Lojas.logo_charset IS 'charset da logo';
 COMMENT ON COLUMN Lojas.logo_ultima_atualizacao IS 'data da ultima atualização da logo';
 
 
--- CRIAR TABELA ESTOQUES
-
 CREATE TABLE Estoques (
                 estoque_id NUMERIC(38) NOT NULL,
-                loja_id_estoques NUMERIC(38) NOT NULL,
+                loja_id NUMERIC(38) NOT NULL,
                 quantidade NUMERIC(38) NOT NULL,
                 produto_id NUMERIC(38) NOT NULL,
                 CONSTRAINT estoque_id PRIMARY KEY (estoque_id)
 );
 COMMENT ON TABLE Estoques IS 'TAbela que armazena informações sobre o estoque dos produtos';
 COMMENT ON COLUMN Estoques.estoque_id IS 'id do estoque';
-COMMENT ON COLUMN Estoques.loja_id_estoques IS 'id das lojas';
+COMMENT ON COLUMN Estoques.loja_id IS 'id das lojas';
 COMMENT ON COLUMN Estoques.quantidade IS 'quantidade dos produtos no estoque';
 COMMENT ON COLUMN Estoques.produto_id IS 'id dos produtos';
 
 
-
--- CRIAR TABELA CLIENTES
 CREATE TABLE Clientes (
-                id_clientes NUMERIC(38) NOT NULL,
+                cliente_id NUMERIC(38) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
                 telefone1 VARCHAR(20),
                 telefone2 VARCHAR(20),
                 telefone3 VARCHAR(20),
-                CONSTRAINT clientes_id PRIMARY KEY (id_clientes)
+                CONSTRAINT clientes_id PRIMARY KEY (cliente_id)
 );
 COMMENT ON TABLE Clientes IS 'Tabela para armazenar os dados de todos os clientes';
-COMMENT ON COLUMN Clientes.id_clientes IS 'coluna sobre os id dos clientes';
+COMMENT ON COLUMN Clientes.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Clientes.email IS 'email dos clientes';
 COMMENT ON COLUMN Clientes.nome IS 'nome dos clientes';
 COMMENT ON COLUMN Clientes.telefone1 IS 'numeros de telefone dos clientes';
@@ -133,49 +127,45 @@ COMMENT ON COLUMN Clientes.telefone2 IS 'outro numero de telefone dos clientes';
 COMMENT ON COLUMN Clientes.telefone3 IS 'numero alternativo de telefone dos clientes';
 
 
--- CRIAR TABELA ENVIOS
 CREATE TABLE Envios (
                 envio_id NUMERIC(38) NOT NULL,
-                loja_id_envios NUMERIC(38) NOT NULL,
-                id_clientes_envios NUMERIC(38) NOT NULL,
+                loja_id NUMERIC(38) NOT NULL,
+                cliente_id NUMERIC(38) NOT NULL,
                 endereco_entrega VARCHAR(512) NOT NULL,
                 status VARCHAR(15) NOT NULL,
                 CONSTRAINT envio_id PRIMARY KEY (envio_id)
 );
 COMMENT ON TABLE Envios IS 'Tabela que armazena informações dos envios';
 COMMENT ON COLUMN Envios.envio_id IS 'id do envio';
-COMMENT ON COLUMN Envios.loja_id_envios IS 'id das lojas';
-COMMENT ON COLUMN Envios.id_clientes_envios IS 'coluna sobre os id dos clientes';
+COMMENT ON COLUMN Envios.loja_id IS 'id das lojas';
+COMMENT ON COLUMN Envios.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Envios.endereco_entrega IS 'endereço de entrega';
 COMMENT ON COLUMN Envios.status IS 'status do envio';
 
 
---CRIAR TABELA PEDIDOS
 CREATE TABLE Pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
                 data_hora TIMESTAMP NOT NULL,
                 status VARCHAR(15) NOT NULL,
-                id_clientes NUMERIC(38) NOT NULL,
-                loja_id_clientes NUMERIC(38) NOT NULL,
+                cliente_id NUMERIC(38) NOT NULL,
+                loja_id NUMERIC(38) NOT NULL,
                 CONSTRAINT pedido_id PRIMARY KEY (pedido_id)
 );
 COMMENT ON TABLE Pedidos IS 'Tabela que armazena todos os pedidos, das lojas';
 COMMENT ON COLUMN Pedidos.pedido_id IS 'id dos pedidos';
 COMMENT ON COLUMN Pedidos.data_hora IS 'data e hora em que os pedidos foram realizados';
 COMMENT ON COLUMN Pedidos.status IS 'status dos pedidos';
-COMMENT ON COLUMN Pedidos.id_clientes IS 'coluna sobre os id dos clientes';
-COMMENT ON COLUMN Pedidos.loja_id_clientes IS 'id das lojas';
+COMMENT ON COLUMN Pedidos.cliente_id IS 'coluna sobre os id dos clientes';
+COMMENT ON COLUMN Pedidos.loja_id IS 'id das lojas';
 
 
-
---CRIAR TABELA PEDIDOS_ITENS
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
                 numero_da_linha NUMERIC(38) NOT NULL,
                 preco_unitario NUMERIC(10,2) NOT NULL,
-                quantidade_items NUMERIC(38) NOT NULL,
-                id_dos_envios NUMERIC(38),
+                quantidade NUMERIC(38) NOT NULL,
+                envio_id NUMERIC(38),
                 CONSTRAINT id_pedido PRIMARY KEY (produto_id, pedido_id)
 );
 COMMENT ON TABLE pedidos_itens IS 'itens dos pedidos';
@@ -183,65 +173,60 @@ COMMENT ON COLUMN pedidos_itens.produto_id IS 'id dos produtos';
 COMMENT ON COLUMN pedidos_itens.pedido_id IS 'id dos pedidos';
 COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'numero da linha dos items do pedido';
 COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preco dos items';
-COMMENT ON COLUMN pedidos_itens.id_dos_envios IS 'id do envio';
+COMMENT ON COLUMN pedidos_itens.envio_id IS 'id do envio';
 
-
-
-
-
---PKS E FKS
 
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
-REFERENCES Produtos (identidade_dos_produtos)
+REFERENCES Produtos (produto_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Estoques ADD CONSTRAINT produtos_estoques_fk
 FOREIGN KEY (produto_id)
-REFERENCES Produtos (identidade_dos_produtos)
+REFERENCES Produtos (produto_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Pedidos ADD CONSTRAINT lojas_pedidos_fk
-FOREIGN KEY (loja_id_clientes)
+FOREIGN KEY (loja_id)
 REFERENCES Lojas (loja_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Envios ADD CONSTRAINT lojas_envios_fk
-FOREIGN KEY (loja_id_envios)
+FOREIGN KEY (loja_id)
 REFERENCES Lojas (loja_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Estoques ADD CONSTRAINT lojas_estoques_fk
-FOREIGN KEY (loja_id_estoques)
+FOREIGN KEY (loja_id)
 REFERENCES Lojas (loja_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Pedidos ADD CONSTRAINT clientes_pedidos_fk
-FOREIGN KEY (id_clientes)
-REFERENCES Clientes (id_clientes)
+FOREIGN KEY (cliente_id)
+REFERENCES Clientes (cliente_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE Envios ADD CONSTRAINT clientes_envios_fk
-FOREIGN KEY (id_clientes_envios)
-REFERENCES Clientes (id_clientes)
+FOREIGN KEY (cliente_id)
+REFERENCES Clientes (cliente_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE pedidos_itens ADD CONSTRAINT envios_pedidos_itens_fk
-FOREIGN KEY (id_dos_envios)
+FOREIGN KEY (envio_id)
 REFERENCES Envios (envio_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
@@ -264,3 +249,8 @@ ALTER TABLE lojas
 ADD CONSTRAINT check_enderecos
 CHECK ((endereco_fisico IS NOT NULL AND endereco_web IS NULL) OR
        (endereco_fisico IS NULL AND endereco_web IS NOT NULL));
+
+      
+ALTER TABLE produtos
+add constraint check_preco
+CHECK (preco_unitario >= 0);
