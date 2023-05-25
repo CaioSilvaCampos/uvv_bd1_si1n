@@ -10,12 +10,15 @@ DROP DATABASE IF EXISTS uvv;
 -- REMOVER USUARIO caio_silva
 drop role if exists caio_silva;
 
+-- REMOVER SCHEMA lojas
+DROP schema if exists lojas;
+
+
+
 
 -- CRIAR USUARIO
-CREATE USER caio_silva SUPERUSER INHERIT CREATEDB CREATEROLE;
+create user caio_silva with createdb createrole encrypted password '123';
 
---ALTERAR USUÁRIO
-alter user caio_silva with encrypted password '123';
  
 
 -- CRIAR DATABASE uvv
@@ -28,7 +31,10 @@ CREATE DATABASE uvv
   allow_connections true;
 
   
---CONECTAR NO BANCO DE DADOS UVV COMO caio_silva
+--COMENTANDO O BANCO DE DADOS
+COMMENT on database uvv is 'Banco de Dados para o PSET que armazenará dados sobre as lojas da UVV';
+ 
+ --CONECTAR NO BANCO DE DADOS UVV COMO caio_silva
 
 \c "dbname=uvv user=caio_silva password=123"
 
@@ -67,6 +73,7 @@ COMMENT ON COLUMN Produtos.imagem_arquivo IS 'arquivo da imagem';
 COMMENT ON COLUMN Produtos.imagem_charset IS 'charset das imagens';
 COMMENT ON COLUMN Produtos.imagem_ultima_atualizacao IS 'data da ultima atualizacao da imagem';
 
+-- CRIAR TABELA LOJAS
 CREATE TABLE Lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 Nome VARCHAR(255) NOT NULL,
@@ -95,6 +102,8 @@ COMMENT ON COLUMN Lojas.logo_charset IS 'charset da logo';
 COMMENT ON COLUMN Lojas.logo_ultima_atualizacao IS 'data da ultima atualização da logo';
 
 
+
+-- CRIAR TABELA ESTOQUES
 CREATE TABLE Estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
@@ -127,6 +136,9 @@ COMMENT ON COLUMN Clientes.telefone2 IS 'outro numero de telefone dos clientes';
 COMMENT ON COLUMN Clientes.telefone3 IS 'numero alternativo de telefone dos clientes';
 
 
+
+
+-- CRIAR TABELA ENVIOS
 CREATE TABLE Envios (
                 envio_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
@@ -142,6 +154,8 @@ COMMENT ON COLUMN Envios.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Envios.endereco_entrega IS 'endereço de entrega';
 COMMENT ON COLUMN Envios.status IS 'status do envio';
 
+
+-- CRIAR TABELA PEDIDOS
 
 CREATE TABLE Pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
@@ -159,6 +173,8 @@ COMMENT ON COLUMN Pedidos.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Pedidos.loja_id IS 'id das lojas';
 
 
+--CRIAR TABELA PEDIDOS_ITENS
+
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -175,6 +191,8 @@ COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'numero da linha dos items do
 COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preco dos items';
 COMMENT ON COLUMN pedidos_itens.envio_id IS 'id do envio';
 
+
+-- FKS E PKS
 
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
@@ -254,3 +272,11 @@ CHECK ((endereco_fisico IS NOT NULL AND endereco_web IS NULL) OR
 ALTER TABLE produtos
 add constraint check_preco
 CHECK (preco_unitario >= 0);
+
+ALTER TABLE Estoques
+ADD CONSTRAINT check_quantidade_estoques
+CHECK (quantidade >= 0);
+
+ALTER TABLE pedidos_itens
+ADD CONSTRAINT check_quantidade_pedidos_itens
+CHECK (quantidade >= 0);
