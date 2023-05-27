@@ -265,6 +265,8 @@ REFERENCES Pedidos (pedido_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
+-- CRIAÇÃO DAS CONSTRAINTS DE CHECAGEM
+
 alter table Pedidos add constraint check_status_pedidos
 check (status in ('CANCELADO', 'COMPLETO', 'ABERTO', 'PAGO', 'REEMBOLSADO', 'ENVIADO'));
 
