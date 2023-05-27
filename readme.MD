@@ -7,8 +7,9 @@
 ### Aluno: Caio Silva Campos 
 ### Turma: SI/1N
 
-## Tecnologia utilizada
+## Tecnologias utilizadas
   -PostgreSQL
+  -MariaDB
 
 # Feito por:
  Caio Silva Campos

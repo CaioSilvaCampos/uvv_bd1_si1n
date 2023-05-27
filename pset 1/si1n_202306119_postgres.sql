@@ -43,6 +43,11 @@ COMMENT on database uvv is 'Banco de Dados para o PSET que armazenará dados sob
 CREATE SCHEMA lojas AUTHORIZATION caio_silva;
 SET SEARCH_PATH TO lojas, "$user", public;
 
+--- USAR SCHEMA COMO MEU USUÁRIO
+
+ALTER USER caio_silva
+SET SEARCH_PATH TO lojas, "$user", public;
+
 
 -- DAR PERMISSÃO
 GRANT ALL PRIVILEGES ON DATABASE uvv TO caio_silva;
