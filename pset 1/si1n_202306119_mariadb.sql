@@ -17,7 +17,6 @@ CREATE USER caio_silva@localhost;
 --COMANDO PARA CONECTAR AO BANCO DE DADOS
 USE uvv;
 
--- CRIAÇÃO TABELA PRODUTOS
 CREATE TABLE Produtos (
                 produto_id NUMERIC(38) NOT NULL,
                 nome_produtos VARCHAR(255) NOT NULL,
@@ -52,7 +51,6 @@ ALTER TABLE Produtos MODIFY COLUMN imagem_charset VARCHAR(512) COMMENT 'charset 
 ALTER TABLE Produtos MODIFY COLUMN imagem_ultima_atualizacao DATE COMMENT 'data da ultima atualizacao da imagem';
 
 
--- CRIAÇÃO TABELA LOJAS
 CREATE TABLE Lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 Nome VARCHAR(255) NOT NULL,
@@ -93,7 +91,6 @@ ALTER TABLE Lojas MODIFY COLUMN logo_charset VARCHAR(512) COMMENT 'charset da lo
 ALTER TABLE Lojas MODIFY COLUMN logo_ultima_atualizacao DATE COMMENT 'data da ultima atualização da logo';
 
 
--- CRIAÇÃO TABELA ESTOQUES
 CREATE TABLE Estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
@@ -102,7 +99,7 @@ CREATE TABLE Estoques (
                 PRIMARY KEY (estoque_id)
 );
 
-ALTER TABLE Estoques COMMENT 'TAbela que armazena informações sobre o estoque dos produtos';
+ALTER TABLE Estoques COMMENT 'Tabela que armazena informações sobre o estoque dos produtos';
 
 ALTER TABLE Estoques MODIFY COLUMN estoque_id NUMERIC(38) COMMENT 'id do estoque';
 
@@ -113,8 +110,6 @@ ALTER TABLE Estoques MODIFY COLUMN quantidade NUMERIC(38) COMMENT 'quantidade do
 ALTER TABLE Estoques MODIFY COLUMN produto_id NUMERIC(38) COMMENT 'id dos produtos';
 
 
-
--- CRIAÇÃO TABELA CLIENTES
 CREATE TABLE Clientes (
                 cliente_id NUMERIC(38) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -139,8 +134,6 @@ ALTER TABLE Clientes MODIFY COLUMN telefone2 VARCHAR(20) COMMENT 'outro numero d
 
 ALTER TABLE Clientes MODIFY COLUMN telefone3 VARCHAR(20) COMMENT 'numero alternativo de telefone dos clientes';
 
-
--- CRIAÇÃO TABELA ENVIOS
 
 CREATE TABLE Envios (
                 envio_id NUMERIC(38) NOT NULL,
@@ -186,7 +179,6 @@ ALTER TABLE Pedidos MODIFY COLUMN cliente_id NUMERIC(38) COMMENT 'coluna sobre o
 ALTER TABLE Pedidos MODIFY COLUMN loja_id NUMERIC(38) COMMENT 'id das lojas';
 
 
--- CRIAÇÃO PEDIDOS_ITENS
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -209,7 +201,6 @@ ALTER TABLE pedidos_itens MODIFY COLUMN preco_unitario NUMERIC(10, 2) COMMENT 'p
 
 ALTER TABLE pedidos_itens MODIFY COLUMN envio_id NUMERIC(38) COMMENT 'id do envio';
 
--- CRIAÇÃO DAS PKS E FKS
 
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)

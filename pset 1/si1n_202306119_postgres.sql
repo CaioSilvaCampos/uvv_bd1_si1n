@@ -43,17 +43,10 @@ COMMENT on database uvv is 'Banco de Dados para o PSET que armazenará dados sob
 CREATE SCHEMA lojas AUTHORIZATION caio_silva;
 SET SEARCH_PATH TO lojas, "$user", public;
 
---- USAR SCHEMA COMO MEU USUÁRIO
-
-ALTER USER caio_silva
-SET SEARCH_PATH TO lojas, "$user", public;
-
 
 -- DAR PERMISSÃO
 GRANT ALL PRIVILEGES ON DATABASE uvv TO caio_silva;
 
-
--- CRIAR TABELA PRODUTOS
 
 CREATE TABLE Produtos (
                 produto_id NUMERIC(38) NOT NULL,
@@ -65,7 +58,7 @@ CREATE TABLE Produtos (
                 imagem_arquivo VARCHAR(512),
                 imagem_charset VARCHAR(512),
                 imagem_ultima_atualizacao DATE,
-                CONSTRAINT produto_id PRIMARY KEY (produto_id)
+                CONSTRAINT pk_produtos PRIMARY KEY (produto_id)
 );
 COMMENT ON TABLE Produtos IS 'Tabela que armazena informações do produto';
 COMMENT ON COLUMN Produtos.produto_id IS 'id dos produtos';
@@ -78,7 +71,7 @@ COMMENT ON COLUMN Produtos.imagem_arquivo IS 'arquivo da imagem';
 COMMENT ON COLUMN Produtos.imagem_charset IS 'charset das imagens';
 COMMENT ON COLUMN Produtos.imagem_ultima_atualizacao IS 'data da ultima atualizacao da imagem';
 
--- CRIAR TABELA LOJAS
+
 CREATE TABLE Lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 Nome VARCHAR(255) NOT NULL,
@@ -91,7 +84,7 @@ CREATE TABLE Lojas (
                 logo_arquivo VARCHAR(512),
                 logo_charset VARCHAR(512),
                 logo_ultima_atualizacao DATE,
-                CONSTRAINT loja_id PRIMARY KEY (loja_id)
+                CONSTRAINT pk_lojas PRIMARY KEY (loja_id)
 );
 COMMENT ON TABLE Lojas IS 'Tabela que armazena informações das lojas';
 COMMENT ON COLUMN Lojas.loja_id IS 'id das lojas';
@@ -107,16 +100,14 @@ COMMENT ON COLUMN Lojas.logo_charset IS 'charset da logo';
 COMMENT ON COLUMN Lojas.logo_ultima_atualizacao IS 'data da ultima atualização da logo';
 
 
-
--- CRIAR TABELA ESTOQUES
 CREATE TABLE Estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
                 quantidade NUMERIC(38) NOT NULL,
                 produto_id NUMERIC(38) NOT NULL,
-                CONSTRAINT estoque_id PRIMARY KEY (estoque_id)
+                CONSTRAINT pk_estoques PRIMARY KEY (estoque_id)
 );
-COMMENT ON TABLE Estoques IS 'TAbela que armazena informações sobre o estoque dos produtos';
+COMMENT ON TABLE Estoques IS 'Tabela que armazena informações sobre o estoque dos produtos';
 COMMENT ON COLUMN Estoques.estoque_id IS 'id do estoque';
 COMMENT ON COLUMN Estoques.loja_id IS 'id das lojas';
 COMMENT ON COLUMN Estoques.quantidade IS 'quantidade dos produtos no estoque';
@@ -130,7 +121,7 @@ CREATE TABLE Clientes (
                 telefone1 VARCHAR(20),
                 telefone2 VARCHAR(20),
                 telefone3 VARCHAR(20),
-                CONSTRAINT clientes_id PRIMARY KEY (cliente_id)
+                CONSTRAINT pk_clientes PRIMARY KEY (cliente_id)
 );
 COMMENT ON TABLE Clientes IS 'Tabela para armazenar os dados de todos os clientes';
 COMMENT ON COLUMN Clientes.cliente_id IS 'coluna sobre os id dos clientes';
@@ -141,16 +132,13 @@ COMMENT ON COLUMN Clientes.telefone2 IS 'outro numero de telefone dos clientes';
 COMMENT ON COLUMN Clientes.telefone3 IS 'numero alternativo de telefone dos clientes';
 
 
-
-
--- CRIAR TABELA ENVIOS
 CREATE TABLE Envios (
                 envio_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
                 cliente_id NUMERIC(38) NOT NULL,
                 endereco_entrega VARCHAR(512) NOT NULL,
                 status VARCHAR(15) NOT NULL,
-                CONSTRAINT envio_id PRIMARY KEY (envio_id)
+                CONSTRAINT pk_envios PRIMARY KEY (envio_id)
 );
 COMMENT ON TABLE Envios IS 'Tabela que armazena informações dos envios';
 COMMENT ON COLUMN Envios.envio_id IS 'id do envio';
@@ -160,15 +148,13 @@ COMMENT ON COLUMN Envios.endereco_entrega IS 'endereço de entrega';
 COMMENT ON COLUMN Envios.status IS 'status do envio';
 
 
--- CRIAR TABELA PEDIDOS
-
 CREATE TABLE Pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
                 data_hora TIMESTAMP NOT NULL,
                 status VARCHAR(15) NOT NULL,
                 cliente_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
-                CONSTRAINT pedido_id PRIMARY KEY (pedido_id)
+                CONSTRAINT pk_pedidos PRIMARY KEY (pedido_id)
 );
 COMMENT ON TABLE Pedidos IS 'Tabela que armazena todos os pedidos, das lojas';
 COMMENT ON COLUMN Pedidos.pedido_id IS 'id dos pedidos';
@@ -178,8 +164,6 @@ COMMENT ON COLUMN Pedidos.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Pedidos.loja_id IS 'id das lojas';
 
 
---CRIAR TABELA PEDIDOS_ITENS
-
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -187,7 +171,7 @@ CREATE TABLE pedidos_itens (
                 preco_unitario NUMERIC(10,2) NOT NULL,
                 quantidade NUMERIC(38) NOT NULL,
                 envio_id NUMERIC(38),
-                CONSTRAINT id_pedido PRIMARY KEY (produto_id, pedido_id)
+                CONSTRAINT pk_pedidos_itens PRIMARY KEY (produto_id, pedido_id)
 );
 COMMENT ON TABLE pedidos_itens IS 'itens dos pedidos';
 COMMENT ON COLUMN pedidos_itens.produto_id IS 'id dos produtos';
@@ -196,8 +180,6 @@ COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'numero da linha dos items do
 COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preco dos items';
 COMMENT ON COLUMN pedidos_itens.envio_id IS 'id do envio';
 
-
--- FKS E PKS
 
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
@@ -285,3 +267,5 @@ CHECK (quantidade >= 0);
 ALTER TABLE pedidos_itens
 ADD CONSTRAINT check_quantidade_pedidos_itens
 CHECK (quantidade >= 0);
+
+
