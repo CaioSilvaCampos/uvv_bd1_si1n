@@ -44,10 +44,14 @@ CREATE SCHEMA lojas AUTHORIZATION caio_silva;
 SET SEARCH_PATH TO lojas, "$user", public;
 
 
+--ALTERANDO O SCHEMA 
+ALTER USER caio_silva
+SET SEARCH_PATH TO lojas, "$user", public;
+
 -- DAR PERMISSÃO
 GRANT ALL PRIVILEGES ON DATABASE uvv TO caio_silva;
 
-
+-- CRIAÇÃO DA TABELA PRODUTOS
 CREATE TABLE Produtos (
                 produto_id NUMERIC(38) NOT NULL,
                 nome_produtos VARCHAR(255) NOT NULL,
@@ -72,6 +76,7 @@ COMMENT ON COLUMN Produtos.imagem_charset IS 'charset das imagens';
 COMMENT ON COLUMN Produtos.imagem_ultima_atualizacao IS 'data da ultima atualizacao da imagem';
 
 
+--CRIAÇÃO DA TABELA LOJAS
 CREATE TABLE Lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 Nome VARCHAR(255) NOT NULL,
@@ -99,7 +104,7 @@ COMMENT ON COLUMN Lojas.logo_arquivo IS 'arquivo da logo';
 COMMENT ON COLUMN Lojas.logo_charset IS 'charset da logo';
 COMMENT ON COLUMN Lojas.logo_ultima_atualizacao IS 'data da ultima atualização da logo';
 
-
+-- CRIAÇÃO DA TABELA ESTOQUES
 CREATE TABLE Estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
@@ -114,6 +119,7 @@ COMMENT ON COLUMN Estoques.quantidade IS 'quantidade dos produtos no estoque';
 COMMENT ON COLUMN Estoques.produto_id IS 'id dos produtos';
 
 
+-- CRIAÇÃO TABELA CLIENTES
 CREATE TABLE Clientes (
                 cliente_id NUMERIC(38) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -132,6 +138,7 @@ COMMENT ON COLUMN Clientes.telefone2 IS 'outro numero de telefone dos clientes';
 COMMENT ON COLUMN Clientes.telefone3 IS 'numero alternativo de telefone dos clientes';
 
 
+--CRIAÇÃO TABELA ENVIOS
 CREATE TABLE Envios (
                 envio_id NUMERIC(38) NOT NULL,
                 loja_id NUMERIC(38) NOT NULL,
@@ -148,6 +155,8 @@ COMMENT ON COLUMN Envios.endereco_entrega IS 'endereço de entrega';
 COMMENT ON COLUMN Envios.status IS 'status do envio';
 
 
+
+--CRIAÇÃO TABELA PEDIDOS
 CREATE TABLE Pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
                 data_hora TIMESTAMP NOT NULL,
@@ -164,6 +173,8 @@ COMMENT ON COLUMN Pedidos.cliente_id IS 'coluna sobre os id dos clientes';
 COMMENT ON COLUMN Pedidos.loja_id IS 'id das lojas';
 
 
+
+--CRIAÇÃO TABELA PEDIDOS_ITENS
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -181,6 +192,7 @@ COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preco dos items';
 COMMENT ON COLUMN pedidos_itens.envio_id IS 'id do envio';
 
 
+--CRIAÇÃO DAS PKS E FKS
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
 REFERENCES Produtos (produto_id)
